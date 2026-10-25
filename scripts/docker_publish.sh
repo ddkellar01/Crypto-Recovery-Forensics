@@ -2,8 +2,7 @@
 set -e
 
 # --- Configuration ---
-IMAGE_NAME="crypto-recovery-forensics-lab"
-# Fallback to organization/username if provided, otherwise standard repository namespace
+IMAGE_NAME="crypt"
 DOCKERHUB_USERNAME="${DOCKERHUB_USERNAME}"
 DOCKER_REPO="${DOCKERHUB_USERNAME}/${IMAGE_NAME}"
 TAG="${1:-latest}"
@@ -15,7 +14,6 @@ if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
 fi
 
 echo "[*] Authenticating with Docker Hub as user: $DOCKERHUB_USERNAME..."
-# Securely pass the Docker Hub token via STDIN to avoid plain-text history leaks
 echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
 echo "[*] Building Docker image for $DOCKER_REPO:$TAG..."
