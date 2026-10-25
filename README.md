@@ -1,4 +1,4 @@
-[Crypto-Recovery-Forensics](https://raw.githubusercontent.com/ddkellar01/Crypto-Recovery-Forensics/main/184150538_1792962236776228.jpg))
+![Crypto-Recovery-Forensics](https://raw.githubusercontent.com/ddkellar01/Crypto-Recovery-Forensics/main/184150538_1792962236776228.jpg)
 
 🎬 **Video:** [Watch the demo]([PASTE_YOUR_VIDEO_LINK_HERE](https://labs.google/fx/tools/flow/shared/video/99dbf576-e240-4fb9-bac6-57aa2360ed59))
 
