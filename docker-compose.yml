@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  forensics-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crypto_forensics_app
+    image: crypto-recovery-forensics-lab:latest
+    restart: unless-stopped
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ETH_RPC_URL=${ETH_RPC_URL:-https://ethereum-rpc.publicnode.com}
+      - BTC_RPC_URL=${BTC_RPC_URL:-}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount outputs directory to persist forensic reports and KML exports
+      - ./outputs:/app/outputs
+      # Mount src for live development/debugging without rebuilding the image
+      - ./src:/app/src
+    working_dir: /app
+    # Default entrypoint drops into interactive Python or keeps container active
+    command: python -m src.forensic_report_exporter
+    networks:
+      - forensics-net
+
+networks:
+  forensics-net:
+    driver: bridge
+
+volumes:
+  forensics-data:
+    driver: local
