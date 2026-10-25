@@ -1,0 +1,12 @@
+# Cryptography, HD Wallets, & Mnemonic Utilities
+bip-utils>=2.9.0
+
+# Ethereum & EVM Interaction Libraries
+web3>=7.0.0
+eth-utils>=5.0.0
+
+# EVM Bytecode Disassembly & Opcodes
+pyevmasm>=0.2.2
+
+# Google GenAI SDK (for Gemini Argon Integration)
+google-genai>=0.7.0
