@@ -6,24 +6,30 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Enforce least-privilege permissions for the GITHUB_TOKEN
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # Pin action to explicit commit SHA for supply-chain security
+    - name: Checkout Repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     - name: Set up Python 3.10
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
       with:
         python-version: "3.10"
+        cache: 'pip' # Enable pip caching for faster execution
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Verify script imports and syntax
+    - name: Verify Script Imports and Syntax
       run: |
         python -m compileall src/
-        
