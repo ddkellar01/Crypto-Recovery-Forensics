@@ -1,30 +1,30 @@
 name: Docker Publish CI
-
 on:
-  push:
-    branches: [ main, master ]
-
-permissions:
-  contents: read
-
+push:
+branches: [ "main" ]
+pull_request:
+branches: [ "main" ]
 jobs:
-  build-and-publish:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@9780b0c442fcf11170fefc1ffcde785982f91654 # v3.3.0
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Run Publish Script
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      run: |
-        chmod +x scripts/docker_publish.sh
-        ./scripts/docker_publish.sh latest
+build-and-push:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout repository
+uses: actions/checkout@v4
+- name: Log in to GitHub Container Registry
+uses: docker/login-action@v3
+with:
+registry: ghcr.io
+username: ${{ github.actor }}
+password: ${{ secrets.GITHUB_TOKEN }}
+- name: Extract Metadata (tags, labels)
+id: meta
+uses: docker/metadata-action@v5
+with:
+images: ghcr.io/${{ github.repository }}
+- name: Build and push Docker image
+uses: docker/build-push-action@v6
+with:
+context: .
+push: ${{ github.event_name != 'pull_request' }}
+tags: ${{ steps.meta.outputs.tags }}
+labels: ${{ steps.meta.outputs.labels }}
