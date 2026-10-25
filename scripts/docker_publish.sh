@@ -1,13 +1,28 @@
 #!/bin/bash
 set -e
 
+# --- Configuration ---
 IMAGE_NAME="crypto-recovery-forensics-lab"
-TAG="latest"
+# Fallback to organization/username if provided, otherwise standard repository namespace
+DOCKERHUB_USERNAME="${DOCKERHUB_USERNAME}"
+DOCKER_REPO="${DOCKERHUB_USERNAME}/${IMAGE_NAME}"
+TAG="${1:-latest}"
 
-echo "[*] Building Docker image..."
-docker build -t $IMAGE_NAME:$TAG .
+# --- Environment Validation ---
+if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+  echo "[-] Error: DOCKERHUB_USERNAME and DOCKERHUB_TOKEN environment variables must be set." >&2
+  exit 1
+fi
 
-echo "[*] Image built successfully: $IMAGE_NAME:$TAG"
-# Optional: Tag and push to container registry (e.g., Docker Hub or GitHub Packages)
-# docker tag $IMAGE_NAME:$TAG your-registry-username/$IMAGE_NAME:$TAG
-# docker push your-registry-username/$IMAGE_NAME:$TAG
+echo "[*] Authenticating with Docker Hub as user: $DOCKERHUB_USERNAME..."
+# Securely pass the Docker Hub token via STDIN to avoid plain-text history leaks
+echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+echo "[*] Building Docker image for $DOCKER_REPO:$TAG..."
+docker build -t "$DOCKER_REPO:$TAG" -t "$DOCKER_REPO:latest" .
+
+echo "[*] Pushing image tags to Docker Hub registry..."
+docker push "$DOCKER_REPO:$TAG"
+docker push "$DOCKER_REPO:latest"
+
+echo "[SUCCESS] Image successfully published: $DOCKER_REPO:$TAG"
