@@ -82,6 +82,8 @@ REPORTING        forensic_report_exporter → structured report in ./outputs
 
 Self-custody fails quietly: a mistyped seed word, a lost derivation path, a keystore with a forgotten structure, funds sitting in an address format you didn't know you had. And when crypto is stolen, victims get a raw hex string and no map. This project is the map — an open, educational lab that teaches how wallet recovery and on-chain forensics actually work by implementing every step in readable Python: how BIP39 entropy becomes keys, how UTXOs link into clusters, how EVM bytecode reveals what a contract really does, and how a phishing signature differs from a legitimate one.
 
+https://labs.google/fx/tools/flow/shared/video/af69369a-b891-49e7-86bd-7712ce0c3017
+
 ## What this does?
 
 **🌱 Seed & key recovery analysis**
