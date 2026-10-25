@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: crypto_forensics_app
-    image: crypto-recovery-forensics-lab:latest
+    image: ddkellar01/crypt:latest
     restart: unless-stopped
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
@@ -14,12 +14,9 @@ services:
       - BTC_RPC_URL=${BTC_RPC_URL:-}
       - PYTHONUNBUFFERED=1
     volumes:
-      # Mount outputs directory to persist forensic reports and KML exports
       - ./outputs:/app/outputs
-      # Mount src for live development/debugging without rebuilding the image
       - ./src:/app/src
     working_dir: /app
-    # Default entrypoint drops into interactive Python or keeps container active
     command: python -m src.forensic_report_exporter
     networks:
       - forensics-net
@@ -27,7 +24,3 @@ services:
 networks:
   forensics-net:
     driver: bridge
-
-volumes:
-  forensics-data:
-    driver: local
